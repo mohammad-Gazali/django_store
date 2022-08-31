@@ -1,0 +1,4 @@
+- when we are using ImageField we should install Pillow module
+- when we are using images in our project we should create a folder in the Main folder of the project (which contains the project and the apps) and go to settings.py and add these (after USE_TZ = True { احتياطاً :) } ):
+	MEDIA_URL = '/media/'
+	MEDIA_ROOT = 'media/' 
