@@ -1,4 +1,29 @@
 - when we are using ImageField we should install Pillow module
-- when we are using images in our project we should create a folder in the Main folder of the project (which contains the project and the apps) and go to settings.py and add these (after USE_TZ = True { احتياطاً :) } ):
+- when we are using images in our project we should create a folder called media in the Main folder of the project (which contains the project and the apps) and go to settings.py and add these (after USE_TZ = True { احتياطاً :) } ):
 	MEDIA_URL = '/media/'
 	MEDIA_ROOT = 'media/' 
+- also we should go to urls.py in our project and use '+' operator to extend urlpatterns list with this list: [static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)] 
+	[IMPORTANT Note: we should first import these:
+		from django.conf.urls.static import static
+		from django_store import settings
+]
+- when we want to use external css and javascript we should do these steps:
+	a- we should create a folder called static in the Main folder of the project (which contains the project and the apps) and put our css and javascript files inside static folder
+
+	b- go to settings.py and add (after STATIC_URL  |{| احتياطاً :) |}| ):
+		STATICFILES_DIRS = [BASE_DIR / 'static']
+		STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
+	[Note: notice that the os is a built-in module to Python]
+
+	c- go to target template and add these tags in the begining of the template:
+		{% load static %}
+		{% load in18 %}
+
+	d- go to our <link> and <script></script> tags and put herf and src attribute like this: 
+		<link href="{% static "<the path to this file where this path start after static folder>" %}" ...>
+		<script src="{% static "<the path to this file where this path start after static folder>" %}" ...></script>
+		// for example:
+			<script defer src="{% static "js/528.fcdc06c1.js" %}"></script>
+			<link href="{% static "css/app.css" %}" rel="stylesheet">
+	[Note: notice we start the path after (NOT from) static folder which in the example above contains 'js' file and 'css' file]
+

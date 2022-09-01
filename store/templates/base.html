@@ -1,0 +1,23 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="ar" class="h-100" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title> {% trans "App Name" %} </title>
+    <script defer src="{% static "js/528.fcdc06c1.js" %}"></script>
+    <script defer src="{% static "js/app.2976048a.js" %}"></script>
+    <link href="{% static "css/528.css" %}" rel="stylesheet">
+    <link href="{% static "css/app.css" %}" rel="stylesheet">
+  </head>
+  <body class="d-flex flex-column h-100 bg-light">
+    {% include "partials/header.html" %}
+    <main>
+      {% block content %}
+      {% endblock content %}
+    </main>
+    {% include "partials/footer.html" %}
+  </body>
+</html>
