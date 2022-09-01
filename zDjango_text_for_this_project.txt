@@ -1,12 +1,15 @@
 - when we are using ImageField we should install Pillow module
+
 - when we are using images in our project we should create a folder called media in the Main folder of the project (which contains the project and the apps) and go to settings.py and add these (after USE_TZ = True { احتياطاً :) } ):
 	MEDIA_URL = '/media/'
 	MEDIA_ROOT = 'media/' 
+
 - also we should go to urls.py in our project and use '+' operator to extend urlpatterns list with this list: [static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)] 
 	[IMPORTANT Note: we should first import these:
 		from django.conf.urls.static import static
 		from django_store import settings
 ]
+
 - when we want to use external css and javascript we should do these steps:
 	a- we should create a folder called static in the Main folder of the project (which contains the project and the apps) and put our css and javascript files inside static folder
 
@@ -27,3 +30,38 @@
 			<link href="{% static "css/app.css" %}" rel="stylesheet">
 	[Note: notice we start the path after (NOT from) static folder which in the example above contains 'js' file and 'css' file]
 
+- if we want to use an image attribute of an object inside 'src' attribute in <img> tag we can do this easily like this: <img src=" {{ <the name of the object>.<image attribute of the object>.url }} " ...>  || notice we used .url in the end || , for example: <img src="{{ product.image.url }}" ...>
+
+- if we want to make our filter (which is used in django templates) we should create a folder called 'templatetags' (THIS NAME ONLY) in the app folder and create inside this folder a python file and name it any name, lets said its name my_filter.py, inside this file we should import like this: "from djnago import template", then we should make this code inside this file:
+	register = template.Library()
+
+	def <any_function>(....):
+    		return ....
+
+	register.filter('<the name we will use in the templates>', <the function we defined above>)
+
+  then if we want to use this filter in any template we should use {% load my_filter %} in the begining of the template, then we can use this filter like this: {{ <something>|<the name of our filter> }}
+
+
+- when we want to add a context to all pages in the site we can do this by using context_processors:
+	- the context_processors are FUNCTIONS that retrun a context for all the pages, these FUNCTIONS can be written like the functions in views.py 
+	- to create our context_processor we should create a python file inside our app (the name of this file is optional), then we should go to this file and add our function (context_processor) which will return the context, this function should contain 'request' as its argument [Note: the name of this function is optional]
+	- also we should go to settings.py and add our context_processor in [TEMPLATES > 'OPTIONS'] like this:
+		TEMPLATES = [
+		{
+			'BACKEND': 'django.template.backends.django.DjangoTemplates',
+			'DIRS': [],
+			'APP_DIRS': True,
+			'OPTIONS': {
+				'context_processors': [
+					'django.template.context_processors.debug',
+					'django.template.context_processors.request',
+					'django.contrib.auth.context_processors.auth',
+					'django.contrib.messages.context_processors.messages',
+					'<our app name>.<our file name>.<our function name (context_processor name)>'
+				],
+			},
+		},
+	]  
+
+	[Note: the context is the same as the dictionary we pass to render() function (for example: {'categories': categories})]

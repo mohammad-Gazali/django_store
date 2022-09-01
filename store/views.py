@@ -1,9 +1,19 @@
 from django.shortcuts import render
+from .models import Product, Slider
 
 # Create your views here.
 
 def index(request):
-    return render(request, "index.html")
+    products = Product.objects.select_related('author').filter(featured=True)
+    slides = Slider.objects.order_by('order')
+    return render(
+        request, 
+        "index.html",
+        {
+            "products": products,
+            "slides": slides
+        }
+    )
 
 
 
