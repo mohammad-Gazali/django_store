@@ -1,5 +1,6 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
-from .models import Product, Slider
+from .models import Category, Product, Slider
 
 # Create your views here.
 
@@ -16,13 +17,27 @@ def index(request):
     )
 
 
-
 def product(request, pid):
     return render(request, "product.html")
 
 
 def category(request, cid=None):
-    return render(request, "category.html")
+    cat = None
+    where = {}
+    if cid:
+        cat = Category.objects.get(pk=cid)
+        where['category_id'] = cid
+    products = Product.objects.filter(**where)
+    pageinator = Paginator(products, 9)
+    page_number = request.GET.get('page')
+    page_obj = pageinator.get_page(page_number)
+    return render(
+        request, "category.html", {
+            'category': cat,
+            'page_obj': page_obj
+        }
+    )
+    
 
 
 def cart(request):
