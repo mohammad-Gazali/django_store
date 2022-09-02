@@ -1,3 +1,4 @@
+from django.contrib.sessions.models import Session
 from django.db import models
 
 # Create your models here.
@@ -66,3 +67,8 @@ class Slider(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Cart(models.Model):
+    items = models.JSONField(default=dict)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)

@@ -5,7 +5,7 @@
     <div class="product card mb-4">
       <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}"/>  {# we use .url after product.image to convert the image to url that 'src' attribute can accept #}
       <div class="card-img-overlay d-flex flex-column align-items-center justify-content-center">
-        <a class="btn btn-outline-light" href="product.html"> {% trans "Add to cart" %} </a>
+        <a class="btn btn-outline-light" data-url="{% url 'store.cart_add' product.id %}" onclick='cartUpdate(this)'> {% trans "Add to cart" %} </a>
         <a class="btn btn-outline-light mt-2" href="{% url 'store.product' product.id %}"> {% trans "View" %} </a>
       </div>
       <div class="card-body">

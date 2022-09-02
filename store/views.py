@@ -1,6 +1,8 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render
-from .models import Category, Product, Slider
+from django.http import JsonResponse
+from django.utils.translation import gettext as _
+from .models import Category, Product, Slider, Cart
 
 # Create your views here.
 
@@ -18,7 +20,8 @@ def index(request):
 
 
 def product(request, pid):
-    return render(request, "product.html")
+    product = Product.objects.get(pk=pid)  # we didn't use select_related() because we display one element in the page, and this will be one query for author attributes
+    return render(request, "product.html", {'product':product})
 
 
 def category(request, cid=None):
@@ -37,14 +40,47 @@ def category(request, cid=None):
     paginator = Paginator(products, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    print(page_obj.paginator.count)
     return render(
         request, "category.html", {
             'category': cat,
             'page_obj': page_obj
         }
     )
+
+
+def cart_update(request, pid):
+    if not request.session.session_key:
+        request.session.create()
+    session_id = request.session.session_key
+
+    cart_model = Cart.objects.filter(session=session_id).last()
+    if cart_model is None:
+        cart_model = Cart.objects.create(session_id=session_id, items=[pid])
+    elif pid not in cart_model.items:
+        cart_model.items.append(pid)
+        cart_model.save()
+    return JsonResponse({
+        'message': _('The product has been added to your cart'),
+        'items_count': len(cart_model.items)
+    })
+
+
+def cart_remove(request, pid):
+    session_id = request.session.session_key
     
+    if not session_id:
+        return JsonResponse({})
+
+    cart_model = Cart.objects.filter(session=session_id).last()
+    if cart_model is None:
+        return JsonResponse({})
+    elif pid in cart_model.items:
+        cart_model.items.remove(pid)
+        cart_model.save()
+    return JsonResponse({
+        'message': _('The product has been removed from your cart'),
+        'items_count': len(cart_model.items)
+    })
 
 
 def cart(request):
