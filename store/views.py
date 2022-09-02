@@ -24,13 +24,20 @@ def product(request, pid):
 def category(request, cid=None):
     cat = None
     where = {}
+    query = request.GET.get('q')
+    cid = request.GET.get('category_from_select', cid)  # the second parameter here in get() function is the default value to cid if 'category_from_select' isn't exist
     if cid:
         cat = Category.objects.get(pk=cid)
         where['category_id'] = cid
+
+    if query:
+        where['name__icontains'] = query
+
     products = Product.objects.filter(**where)
-    pageinator = Paginator(products, 9)
+    paginator = Paginator(products, 9)
     page_number = request.GET.get('page')
-    page_obj = pageinator.get_page(page_number)
+    page_obj = paginator.get_page(page_number)
+    print(page_obj.paginator.count)
     return render(
         request, "category.html", {
             'category': cat,
