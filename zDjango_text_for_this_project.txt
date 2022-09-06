@@ -9,6 +9,7 @@
 		from django.conf.urls.static import static
 		from django_store import settings
 ]
+	[IMPORTANT Note: we should also do this step when we use models.FileField]
 
 - when we want to use external css and javascript we should do these steps:
 	a- we should create a folder called static in the Main folder of the project (which contains the project and the apps) and put our css and javascript files inside static folder
@@ -65,3 +66,53 @@
 	]  
 
 	[Note: the context is the same as the dictionary we pass to render() function (for example: {'categories': categories})]
+
+- we can use a virtual email to test the proccess of sending emails, we are using in this project a website is called 'mailtrap', after we sign up we can go to Sandbox, then choose an inbox, when we click on 'My inbox' then we can choose our web framework in the select input, fortunately we have an option of django, when click on it, then the page show us to write this in settings.py:
+	EMAIL_HOST = 'smtp.mailtrap.io'
+	EMAIL_HOST_USER = '64505df1cc6d9a'
+	EMAIL_HOST_PASSWORD = '5413a4b707881f'
+	EMAIL_PORT = '2525'
+
+	[Note: if you don't understand something above you can see in the fourth path > in the third unit > in the last lesson in hsoup academy ehat you want]
+	
+	###################################################################################
+	[[VERY IMPORTANT Note: when we want to send emails in django we should import these:
+	from django.core.mail import send_mail
+	from django.template.loader import render_to_string
+	]]
+	###################################################################################
+
+- if we want to add a pdf url in our site we should go to settings.py and add to it this variable [SITE_URL = 'http://127.0.0.1:8000' (in this example we used the local host url as our main url of the site)], and you can see this example for an anchor tag in a template which direct us to the pdf:
+	
+	# in the models.py:
+
+	from <our main project> import settings
+
+	class Product(models.Model):
+    	name = models.CharField(max_length=255)
+		...
+		...
+		pdf_file = models.FileField()
+		...
+		...
+		...
+
+		@property
+		def pdf_file_url(self)
+			return settings.SITE_URL + self.pdf_file.url
+
+		...
+		...
+
+
+	# in the template:
+
+	.........
+	.........
+
+	<a href="{{ product.pdf_file_url }}" target="_blank" style="......."> 
+	{{ product.name }} 
+	</a>
+
+	.........
+	.........
