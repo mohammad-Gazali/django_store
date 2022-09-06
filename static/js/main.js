@@ -1,5 +1,5 @@
 async function cartUpdate(e){
-    const { data } = await axios(e.dataset.url)
+    const { data }  = await axios(e.dataset.url)
     const { message, items_count } = data
     notyf.success({
         message,
