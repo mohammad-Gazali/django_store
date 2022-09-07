@@ -1,6 +1,7 @@
 from django.contrib.sessions.models import Session
 from django.db import models
 from django_store import settings
+from django.utils.translation import gettext as _
 
 # Create your models here.
 
@@ -14,6 +15,11 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _('category')
+        verbose_name_plural = _('categories')
+
+
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
@@ -23,6 +29,10 @@ class Author(models.Model):
     
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _('author')
+        verbose_name_plural = _('authors')
 
 
 class Product(models.Model):
@@ -44,6 +54,10 @@ class Product(models.Model):
     
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _('product')
+        verbose_name_plural = _('products')
 
 
 class Order(models.Model):
@@ -77,6 +91,10 @@ class Slider(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = _('slider')
+        verbose_name_plural = _('sliders')
 
 
 class Cart(models.Model):
