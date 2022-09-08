@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import mimetypes
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -121,7 +122,7 @@ USE_TZ = True
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Static files (CSS, JavaScript, Images)
@@ -129,8 +130,13 @@ MEDIA_ROOT = 'media/'
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+mimetypes.add_type('text/html', '.html', True)
+mimetypes.add_type('text/css', '.css', True)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
