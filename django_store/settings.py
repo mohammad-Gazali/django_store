@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-@@&^*ovoowh@-^98g8ub!oo4#ug26@ri!gze9zk0bh_s)9@4wr
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'gazali-store.com',
+    'store-gazali.herokuapp.com',
     '127.0.0.1'
 ]
 
