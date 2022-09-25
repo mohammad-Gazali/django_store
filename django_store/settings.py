@@ -24,11 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@@&^*ovoowh@-^98g8ub!oo4#ug26@ri!gze9zk0bh_s)9@4wr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    'gazali-store.herokuapp.com',
-    '127.0.0.1'
+    'store-gazali.herokuapp.com',
+    '127.0.0.1',
+    'localhost'
 ]
 
 
@@ -82,12 +83,8 @@ WSGI_APPLICATION = 'django_store.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dc1eu3okjajva8',
-        'USER': 'tbeyjchlphvezb',
-        'PASSWORD': '8c163403e4cc36674379e5acdd5716bde851c7eed331b5dbd491c9c77514ebc3',
-        'HOST': 'ec2-52-4-87-74.compute-1.amazonaws.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

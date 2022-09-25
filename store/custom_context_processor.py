@@ -1,5 +1,6 @@
 # this file is made for giving each page in the site a context, namely, we can use this context in each template in the app
 # we can call this file any name we want
+# we should add this to context_processors in OPTIONS in TEMPLATES in settings.py "store.custom_context_processor.store_website" namely "<name of the app>.<name of the file>.<name of the function>"
 # [Note: the context is like the dictionary we pass to render() function (for example: {'categories': categories})]
 
 from store.models import Category, Cart, Product
