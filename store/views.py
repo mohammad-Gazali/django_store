@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.utils.translation import gettext as _
 from .models import Category, Product, Slider, Cart
 
+
 # Create your views here.
 
 def index(request):
@@ -92,4 +93,5 @@ def checkout(request):
 
 
 def checkout_complete(request):
+    Cart.objects.filter(session=request.session.session_key).delete()
     return render(request, "checkout-complete.html")

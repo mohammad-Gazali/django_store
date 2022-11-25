@@ -21,17 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@@&^*ovoowh@-^98g8ub!oo4#ug26@ri!gze9zk0bh_s)9@4wr'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-@@&^*ovoowh@-^98g8ub!oo4#ug26@ri!gze9zk0bh_s)9@4wr')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = str(os.environ.get('DEBUG')) == "1"  # 1 == True
 
 ALLOWED_HOSTS = [
-    'store-gazali.herokuapp.com',
     '127.0.0.1',
     'localhost'
 ]
 
+if not DEBUG:
+    ALLOWED_HOSTS += [os.environ.get('ALLOWED_HOST')]
 
 # Application definition
 
@@ -144,3 +145,8 @@ EMAIL_HOST_PASSWORD = '5413a4b707881f'
 EMAIL_PORT = '2525'
 
 SITE_URL = 'http://127.0.0.1:8000'
+
+
+STRIPE_PUBLISHABLE_KEY = "pk_test_51Lf1RcEWvTqKg2ZXm8CN724FN1VzkN5kpARgKW84eFpcVkf2xy0n7cQeCLdnA4x8H0koaNZjji2kbdaRPAaAck2h00CcsU8fU6"
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+CURRENCY=os.environ.get('CURRENCY')

@@ -17,7 +17,7 @@
         <h4 class="my-3"> {% trans "Your information" %} </h4>
         <div class="card">
           <div class="card-body">
-            <form action="{% url 'checkout.order' %}" id="form-user-info" method="POST">
+            <form id="form-user-info">
               {% csrf_token %}
               <div class="row">
                 <div class="col-md-6">
@@ -61,9 +61,6 @@
                   required
                 />
               </div>
-              <button class="btn btn-primary" type="submit">
-                {% trans "Save" %}
-              </button>
             </form>
           </div>
         </div>
@@ -78,10 +75,24 @@
             </div>
           </div>
           <div id="pm-stripe" class="col-md-6">
-            <div class="card" role="button">
+            <div class="card" role="button" onclick="createStripeSession()">
               <div class="card-body text-center">
                 <p>{% trans "Credit Card" %}</p>
                 <i class="lni lni-credit-cards fs-1"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div id="payment-form-container">
+              <div id="stripe-card" class="card my-3 p-3" style="display: none">
+                <form id="payment-form">
+                  <div id="payment-element">
+
+                  </div>
+                  <button id="stripe-submit" class="btn btn-primary mt-3">
+                    {% trans "Pay Now" %}
+                  </button>
+                </form>
               </div>
             </div>
           </div>
