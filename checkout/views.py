@@ -4,10 +4,14 @@ from django.shortcuts import redirect
 # from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
+from django.urls import reverse
+from django.http import HttpResponse
 from store.models import Product, Cart, Order
 from django_store import settings
+from paypal.standard.forms import PayPalPaymentsForm
 from .models import Transaction, PaymentMethod
-from .forms import UserInfoForm
+from .forms import UserInfoForm, MyPayPalPaymentsForm
+
 import stripe
 import math
 
@@ -20,7 +24,7 @@ def stripe_config(request):
 
 
 def stripe_transaction(request):
-    transaction = make_transaction(request, PaymentMethod.Stripe)
+    transaction = make_transaction(request, PaymentMethod.Paypal)
     
     if not transaction:
         return JsonResponse({
@@ -42,8 +46,28 @@ def stripe_transaction(request):
         'client_secret': intent['client_secret']
     })
 
+
 def paypal_transaction(request):
     transaction = make_transaction(request, PaymentMethod.Paypal)
+
+    if not transaction:
+        return JsonResponse({
+            'message': _('Please enter valid information')
+        }, status=400)
+
+    form = MyPayPalPaymentsForm(
+        initial={
+            "business": settings.PAYPAL_EMAIL,  # the email of customer
+            "amount": transaction.amount,
+            "invoice": transaction.id,  # "invoice" is equivalent to the number of bill
+            "currency_code": settings.CURRENCY,
+            "return_url": f"http://{request.get_host()}/{reverse('store.checkout_complete')}", 
+            "cancel_url": f"http://{request.get_host()}/{reverse('store.checkout')}", 
+            "notify_url": f"http://{request.get_host()}/{reverse('checkout.paypal.webhook')}"  # this url reqresent the url of paypal webhook
+        }
+    )
+
+    return HttpResponse(form.render())
 
 
 def make_transaction(request, pm):

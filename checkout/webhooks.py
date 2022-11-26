@@ -3,9 +3,11 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
-from django_store.settings import STRIPE_ENDPOINT_SECRET
-from .models import Transaction
+from django_store.settings import STRIPE_ENDPOINT_SECRET, PAYPAL_EMAIL
+from .models import Transaction, TransactionStatus
 from store.models import Order, Product
+from paypal.standard.models import ST_PP_COMPLETED
+from paypal.standard.ipn.signals import valid_ipn_received
 import stripe
 
 
@@ -40,10 +42,27 @@ def stripe_webhook(request):
     return HttpResponse(status=200)
 
 
+@csrf_exempt
+def paypal_exempt(sender, **kwargs):  #? this function will be a complete function to "ipn" function which weused in "./urls.py"
+    if sender.payment_status == ST_PP_COMPLETED:
+        if sender.receiver_email != PAYPAL_EMAIL:
+            return
+        
+        print("Payment was successful")
+        make_order(sender.invoice)  #?  Here we used "sender.invoice" as a param to make_order() because we set "invoice" in PayPalPaymentsForm in paypal_transaction in "./views.py" to the id of target transaction
+
+
+#! This step is necessary to paypal payment process
+valid_ipn_received.connect(paypal_exempt)  #? "valid_ipn_received" is built-in to paypal module, which is connect us to the function we want which is here paypal_exempt() function, but this variable (valid_ipn_received) is implemented if only the function ipn() (which we used in "./urls.py") successed
+
 
 def make_order(tid):
     transaction = Transaction.objects.get(pk=tid)
     
+    transaction.status = TransactionStatus.Completed
+
+    transaction.save()
+
     order = Order.objects.create(transaction_id=tid)
 
     products = Product.objects.filter(pk__in=transaction.items)

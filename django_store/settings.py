@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'paypal.standard.ipn',
     'checkout',
     'store',
 ]
@@ -147,12 +148,15 @@ EMAIL_PORT = '2525'
 SITE_URL = 'http://127.0.0.1:8000'
 
 
-#* Secrets
+#| SECRETS
 
 STRIPE_PUBLISHABLE_KEY = "pk_test_51Lf1RcEWvTqKg2ZXm8CN724FN1VzkN5kpARgKW84eFpcVkf2xy0n7cQeCLdnA4x8H0koaNZjji2kbdaRPAaAck2h00CcsU8fU6"
-
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+STRIPE_ENDPOINT_SECRET = os.environ.get('STRIPE_ENDPOINT_SECRET')
+
+
+PAYPAL_TEST = str(os.environ.get('PAYPAL_TEST')) == "1" 
+PAYPAL_EMAIL = os.environ.get('PAYPAL_EMAIL')
+
 
 CURRENCY = os.environ.get('CURRENCY')
-
-STRIPE_ENDPOINT_SECRET = os.environ.get('STRIPE_ENDPOINT_SECRET')
