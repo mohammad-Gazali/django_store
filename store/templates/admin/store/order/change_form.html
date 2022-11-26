@@ -1,0 +1,62 @@
+{% extends 'admin/change_form.html' %}
+{% load i18n my_filters %}
+
+{% block content %}
+    <fieldset class="module aligned mb-0">
+        <div class="form-row">
+            <div>
+                <label>{% trans "Customer" %}:</label>
+                <div class="readonly">{{ original.transaction.customer_name }}</div>  <!-- "original" refers to "order" object -->
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="module aligned mb-0">
+        <div class="form-row">
+            <div>
+                <label>{% trans "Email" %}:</label>
+                <div class="readonly">{{ original.transaction.customer_email }}</div>  <!-- "original" refers to "order" object -->
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="module aligned mb-0">
+        <div class="form-row">
+            <div>
+                <label>{% trans "Payment Method" %}:</label>
+                <div class="readonly">{{ original.transaction.get_payment_method_display }}</div>  <!-- "original" refers to "order" object -->
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="module aligned mb-0">
+        <div class="form-row">
+            <div>
+                <label>{% trans "Amount" %}:</label>
+                <div class="readonly">{{ original.transaction.amount|currency }}</div>  <!-- "original" refers to "order" object -->
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="module aligned mb-0">
+        <div class="form-row">
+            <div>
+                <label>{% trans "Date" %}:</label>
+                <div class="readonly">{{ original.created_at }}</div>  <!-- "original" refers to "order" object -->
+            </div>
+        </div>
+    </fieldset>
+    <h1>{% trans "Products" %}</h1>
+    <table style="min-width: 600px">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Price" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in original.orderproduct_set.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

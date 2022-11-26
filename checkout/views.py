@@ -24,7 +24,7 @@ def stripe_config(request):
 
 
 def stripe_transaction(request):
-    transaction = make_transaction(request, PaymentMethod.Paypal)
+    transaction = make_transaction(request, PaymentMethod.Stripe)
     
     if not transaction:
         return JsonResponse({

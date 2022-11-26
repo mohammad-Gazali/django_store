@@ -68,7 +68,12 @@ class Order(models.Model):
 
 
     def __str__(self):
-        return self.id
+        return str(self.id)
+
+    
+    class Meta:
+        verbose_name = _('order')
+        verbose_name_plural = _('orders')
 
 
 class OrderProduct(models.Model):
