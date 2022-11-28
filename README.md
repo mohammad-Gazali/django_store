@@ -38,7 +38,7 @@ and for linux and macOS:
 source venv/bin/activate
 ```
 
- ### <mark style="background-color: whitesmoke;font-weight: bold; padding: 4px">3- migrating the data to the database</mark> 
+ ### <mark style="background-color: whitesmoke;font-weight: bold; padding: 4px">3- installing dependicies</mark> 
 
 <br/>
 
