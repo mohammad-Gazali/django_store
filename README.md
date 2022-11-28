@@ -42,6 +42,16 @@ source venv/bin/activate
 
 <br/>
 
+> Then we should install the required modules for this project by running this command __when the virtual environment is activated__.
+
+```
+pip install -r requirements.txt
+```
+
+ ### <mark style="background-color: whitesmoke;font-weight: bold; padding: 4px">4- migrating the data to the database</mark> 
+
+<br/>
+
 >__when we are activating the venv__ we should run these commands to migrate the data to the database:
 
 ```
@@ -54,7 +64,7 @@ then:
 python manage.py migrate
 ```
 
- ### <mark style="background-color: whitesmoke;font-weight: bold; padding: 4px">4- creating an admin for the website</mark>
+ ### <mark style="background-color: whitesmoke;font-weight: bold; padding: 4px">5- creating an admin for the website</mark>
  <br/>
 
  >if we want to access the admin url through  __/admin__ end point then we should create it the admin by running this command:
@@ -65,7 +75,7 @@ python manage.py createsuperuser
 
 then we can determine his information.
 
- ### <mark style="background-color: whitesmoke;font-weight: bold; padding: 4px">5- running the server</mark>
+ ### <mark style="background-color: whitesmoke;font-weight: bold; padding: 4px">6- running the server</mark>
  <br/>
 
  > Finally, we can run the server like this:
