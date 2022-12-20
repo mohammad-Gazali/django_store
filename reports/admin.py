@@ -31,7 +31,7 @@ class OrderReportAdmin(admin.ModelAdmin):
             .annotate(year=ExtractYear("created_at"))  #| ExtractYear() returns the Year of its input
 
             #! notice that we give values() function an parameter of "year", this because we generated a new attribute called "year" by using annotate() function
-            .values("year")  #| values() function return specific attributes from the queryset, also it is a necessary step for aggregation the result depinding on "year" value
+            .values("year")  #| values() function return specific attributes from the queryset (BUT THAT'S DOESN'T MEANS THAT WE CAN'T ACCESS OTHER ATTRIBUTES IN THE QUERYSET, for example: we will access the attribute transaction below when we will use Sum() even we didn't determine it in the values() method), also it is a necessary step for aggregation the result depinding on "year" value
             
             #! IMPORTANT: Sum() class below take our expression and apply the process of sum DEPENDING ON VALUES, so when we determined only "year" value then the Sum() class will Aggregate the result depending on values() which we passed BEFORE using annotate() with Sum()
             #! Also if we put values("year") after annotate(sum=Sum(...)) then the result won't be aggregated because we didn't determined the values that we want to aggregate depend on
