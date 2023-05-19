@@ -18,9 +18,9 @@ def store_website(request):
         for item in cart_products:
             cart_total += item.price
 
-    categories = Category.objects.order_by('order')
+    categories = Category.objects.order_by("order")
     return {
-        'categories': categories,
-        'cart_products': cart_products,
-        'cart_total': cart_total
-        }
+        "categories": categories,
+        "cart_products": cart_products,
+        "cart_total": cart_total,
+    }

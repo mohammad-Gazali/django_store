@@ -7,22 +7,26 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('checkout', '0001_initial'),
-        ('store', '0004_alter_author_options_alter_category_options_and_more'),
+        ("checkout", "0001_initial"),
+        ("store", "0004_alter_author_options_alter_category_options_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='order',
-            name='customer',
+            model_name="order",
+            name="customer",
         ),
         migrations.RemoveField(
-            model_name='order',
-            name='total',
+            model_name="order",
+            name="total",
         ),
         migrations.AddField(
-            model_name='order',
-            name='transaction',
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.PROTECT, to='checkout.transaction'),
+            model_name="order",
+            name="transaction",
+            field=models.OneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="checkout.transaction",
+            ),
         ),
     ]

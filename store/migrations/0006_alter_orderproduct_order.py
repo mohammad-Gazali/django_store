@@ -7,13 +7,15 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('store', '0005_remove_order_customer_remove_order_total_and_more'),
+        ("store", "0005_remove_order_customer_remove_order_total_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='orderproduct',
-            name='order',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='store.order'),
+            model_name="orderproduct",
+            name="order",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="store.order"
+            ),
         ),
     ]

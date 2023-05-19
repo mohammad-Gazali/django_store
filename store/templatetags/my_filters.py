@@ -7,7 +7,7 @@ register = template.Library()
 
 
 def currency(amount):
-    return "{:.2f}".format(amount) + ' $'
+    return "{:.2f}".format(amount) + " $"
 
 
-register.filter('currency', currency)
+register.filter("currency", currency)

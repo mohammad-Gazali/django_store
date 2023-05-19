@@ -6,6 +6,7 @@ from checkout.models import Transaction
 
 # Create your models here.
 
+
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
     featured = models.BooleanField(default=False)
@@ -17,9 +18,8 @@ class Category(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = _('category')
-        verbose_name_plural = _('categories')
-
+        verbose_name = _("category")
+        verbose_name_plural = _("categories")
 
 
 class Author(models.Model):
@@ -27,38 +27,44 @@ class Author(models.Model):
     bio = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name = _('author')
-        verbose_name_plural = _('authors')
+        verbose_name = _("author")
+        verbose_name_plural = _("authors")
 
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
     short_description = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    image = models.ImageField()  # when you use ImageField you should install Pillow module
+    image = (
+        models.ImageField()
+    )  # when you use ImageField you should install Pillow module
     pdf_file = models.FileField(null=True)
     price = models.FloatField()
     featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True)  # models.NULL means that if we remove the author of some products then the author attribute of Product object will be null
-    
+    author = models.ForeignKey(
+        Author, on_delete=models.SET_NULL, null=True
+    )  # models.NULL means that if we remove the author of some products then the author attribute of Product object will be null
+
     @property
     def pdf_file_url(self):
-        return settings.SITE_URL + self.pdf_file.url  # notice that we here add settings.py a variable which must be called 'SITE_URL' and give it a value of the main url of the site (the url 'http://127.0.0.1:8000' in this example), then we add our profile as a url to returned value
-    
+        return (
+            settings.SITE_URL + self.pdf_file.url
+        )  # notice that we here add settings.py a variable which must be called 'SITE_URL' and give it a value of the main url of the site (the url 'http://127.0.0.1:8000' in this example), then we add our profile as a url to returned value
+
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name = _('product')
-        verbose_name_plural = _('products')
+        verbose_name = _("product")
+        verbose_name_plural = _("products")
 
 
 class Order(models.Model):
@@ -66,14 +72,12 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
     def __str__(self):
         return str(self.id)
 
-    
     class Meta:
-        verbose_name = _('order')
-        verbose_name_plural = _('orders')
+        verbose_name = _("order")
+        verbose_name_plural = _("orders")
 
 
 class OrderProduct(models.Model):
@@ -95,8 +99,8 @@ class Slider(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = _('slider')
-        verbose_name_plural = _('sliders')
+        verbose_name = _("slider")
+        verbose_name_plural = _("sliders")
 
 
 class Cart(models.Model):

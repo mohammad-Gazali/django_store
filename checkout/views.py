@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
-#? These imports were commented because we moved them to "./webhooks.py"
+
+# ? These imports were commented because we moved them to "./webhooks.py"
 # from django.core.mail import send_mail
 # from django.template.loader import render_to_string
 from django.http import JsonResponse
@@ -16,44 +17,40 @@ import stripe
 import math
 
 
-
 def stripe_config(request):
-    return JsonResponse({
-        'public_key': settings.STRIPE_PUBLISHABLE_KEY
-    })
+    return JsonResponse({"public_key": settings.STRIPE_PUBLISHABLE_KEY})
 
 
 def stripe_transaction(request):
     transaction = make_transaction(request, PaymentMethod.Stripe)
-    
+
     if not transaction:
-        return JsonResponse({
-            'message': _('Please enter valid information')
-        }, status=400)
+        return JsonResponse(
+            {"message": _("Please enter valid information")}, status=400
+        )
 
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     intent = stripe.PaymentIntent.create(
-        amount=transaction.amount * 100,  # We multipliyed here by 100 because stripe work in this method [ surely the user won't pay ten times the amount :) ]
+        amount=transaction.amount
+        * 100,  # We multipliyed here by 100 because stripe work in this method [ surely the user won't pay ten times the amount :) ]
         currency=settings.CURRENCY,
-        payment_method_types=['card'],
+        payment_method_types=["card"],
         metadata={  # in "metadata" argument we can send any data we want to stripe
-            'transaction': transaction.id
-        }
+            "transaction": transaction.id
+        },
     )
 
-    return JsonResponse({
-        'client_secret': intent['client_secret']
-    })
+    return JsonResponse({"client_secret": intent["client_secret"]})
 
 
 def paypal_transaction(request):
     transaction = make_transaction(request, PaymentMethod.Paypal)
 
     if not transaction:
-        return JsonResponse({
-            'message': _('Please enter valid information')
-        }, status=400)
+        return JsonResponse(
+            {"message": _("Please enter valid information")}, status=400
+        )
 
     form = MyPayPalPaymentsForm(
         initial={
@@ -61,9 +58,9 @@ def paypal_transaction(request):
             "amount": transaction.amount,
             "invoice": transaction.id,  # "invoice" is equivalent to the number of bill
             "currency_code": settings.CURRENCY,
-            "return_url": f"http://{request.get_host()}/{reverse('store.checkout_complete')}", 
-            "cancel_url": f"http://{request.get_host()}/{reverse('store.checkout')}", 
-            "notify_url": f"http://{request.get_host()}/{reverse('checkout.paypal.webhook')}"  # this url reqresent the url of paypal webhook
+            "return_url": f"http://{request.get_host()}/{reverse('store.checkout_complete')}",
+            "cancel_url": f"http://{request.get_host()}/{reverse('store.checkout')}",
+            "notify_url": f"http://{request.get_host()}/{reverse('checkout.paypal.webhook')}",  # this url reqresent the url of paypal webhook
         }
     )
 
@@ -75,9 +72,9 @@ def make_transaction(request, pm):
     if form.is_valid():
         cart = Cart.objects.filter(session=request.session.session_key).last()
         products = Product.objects.filter(pk__in=cart.items)
-        
+
         total = 0
-        
+
         for item in products:
             total += item.price
 
@@ -85,15 +82,15 @@ def make_transaction(request, pm):
             return None
 
         return Transaction.objects.create(
-            customer=form.cleaned_data, 
+            customer=form.cleaned_data,
             session=request.session.session_key,
             payment_method=pm,
             items=cart.items,
-            amount=math.floor(total)
+            amount=math.floor(total),
         )
 
 
-#? This function used before creating make_transaction() function above
+# ? This function used before creating make_transaction() function above
 # def make_order(request):
 #     if request.method == 'GET':
 #         return redirect('store.checkout')
@@ -102,9 +99,9 @@ def make_transaction(request, pm):
 #     if form.is_valid():
 #         cart = Cart.objects.filter(session=request.session.session_key).last()
 #         products = Product.objects.filter(pk__in=cart.items)
-        
+
 #         total = 0
-        
+
 #         for item in products:
 #             total += item.price
 
@@ -113,7 +110,7 @@ def make_transaction(request, pm):
 #         order = Order.objects.create(customer=form.cleaned_data, total=total)
 #         for product in products:
 #             order.orderproduct_set.create(product_id=product.id, price=product.price)  #! Notice here we used created directly without "objects" property
-            
+
 
 #         send_order_email(order, products)  # this function is defined below
 #         cart.delete()
@@ -122,7 +119,7 @@ def make_transaction(request, pm):
 #         return redirect('store.checkout')
 
 
-#? This function was commented because we moved it to "./webhooks.py"
+# ? This function was commented because we moved it to "./webhooks.py"
 ######## Notice that we use this function in the previous function, so un python we can use a function1 inside another function2 even this function2 is before function1 [[[[[ ONLY INSIDE THE FUNCTIONS ]]]]] ######
 # def send_order_email(order, products):
 
